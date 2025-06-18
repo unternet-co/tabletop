@@ -2,13 +2,15 @@
   "git": {
     "commitMessage": "chore: bump version to v${version}",
     "tag": false,
+    "commit": false,
     "push": false,
-    "requireUpstream": false
+    "requireUpstream": false,
+    "requireCleanWorkingDir": false
   },
   "npm": {
     "publish": false
   },
   "hooks": {
-    "after:release": "open CHANGELOG.md"
+    "after:release": "sed -i '' \"1s/^/## ${version} - $(date +%Y-%m-%d)\\n\\n/\" CHANGELOG.md && open CHANGELOG.md"
   }
 }

@@ -1,3 +1,3 @@
-## v0.1.1
+# 0.1.0
 
-Created initial build system & got it working.
+Empty app shell! Hello world.
