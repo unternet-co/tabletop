@@ -3,7 +3,9 @@
     "commitMessage": "chore: release v${version}",
     "tagName": "v${version}",
     "pushRepo": "origin",
-    "push": false
+    "push": false,
+    "commit": false,
+    "tag": true
   },
   "npm": {
     "publish": false
