@@ -1,11 +1,16 @@
 {
-  "github": {
-    "publish": false
+  "git": {
+    "commitMessage": "chore: release v${version}",
+    "tagName": "v${version}",
+    "pushRepo": "origin",
+    "push": false,
+    "commit": false
   },
   "npm": {
     "publish": false
   },
   "hooks": {
-    "after:bump": "npm version ${version} --workspaces --no-git-tag-version && open CHANGELOG.md"
+    "after:bump": "npm version ${version} --workspaces --no-git-tag-version",
+    "after:release": "open CHANGELOG.md"
   }
 }
