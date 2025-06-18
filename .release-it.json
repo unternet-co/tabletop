@@ -1,4 +1,7 @@
 {
+  "github": {
+    "publish": false
+  },
   "npm": {
     "publish": false
   },
