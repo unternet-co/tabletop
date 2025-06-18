@@ -1,0 +1,20 @@
+name: Documentation Sync
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  trigger-rebuild:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Trigger deployment
+      run: |
+        if [ -n "${{ secrets.DOCS_DEPLOY_HOOK }}" ]; then
+          echo "Triggering documentation rebuild..."
+          curl -X POST "${{ secrets.DOCS_DEPLOY_HOOK }}"
+          echo "Rebuild triggered successfully"
+        else
+          echo "RENDER_DEPLOY_HOOK not configured, skipping deployment trigger"
+        fi

@@ -1,0 +1,50 @@
+name: Release Tabletop (Desktop)
+
+on:
+  push:
+    tags:
+      - '*.*.*'
+permissions:
+  contents: write
+jobs:
+  package:
+    name: Build and Release Tabletop (Desktop)
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        include:
+          - os: macos-14
+            platform: mac
+            build_command: --mac --universal
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          submodules: true
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version-file: .nvmrc
+          cache: 'npm'
+
+      - name: Clean install dependencies
+        working-directory: desktop
+        run: |
+          rm -rf node_modules package-lock.json
+          npm ci
+
+      - name: Build and release (${{ matrix.platform }})
+        working-directory: desktop
+        run: |
+          npm run build
+          npx electron-builder ${{ matrix.build_command }} --publish always
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          CSC_LINK: ${{ secrets.MAC_CERT }}
+          CSC_KEY_PASSWORD: ${{ secrets.MAC_CERT_PASSWORD }}
+          APPLE_ID: ${{ secrets.APPLE_ID }}
+          APPLE_TEAM_ID: ${{ secrets.APPLE_TEAM_ID }}
+          APPLE_APP_SPECIFIC_PASSWORD: ${{ secrets.APPLE_APP_SPECIFIC_PASSWORD }}
+          APP_UNTERNET_API_KEY: ${{ secrets.APP_UNTERNET_API_KEY }} 
