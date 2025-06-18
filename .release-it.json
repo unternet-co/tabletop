@@ -1,13 +1,14 @@
 {
   "git": {
-    "commitMessage": "chore: release v${version}",
-    "tagName": "v${version}",
-    "pushRepo": "origin"
+    "commitMessage": "chore: bump version to v${version}",
+    "tag": false,
+    "push": false,
+    "requireUpstream": false
   },
   "npm": {
     "publish": false
   },
   "hooks": {
-    "after:bump": "npm version ${version} --workspaces --no-git-tag-version"
+    "after:release": "open CHANGELOG.md"
   }
 }
