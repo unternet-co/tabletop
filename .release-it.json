@@ -6,6 +6,6 @@
     "publish": false
   },
   "hooks": {
-    "after:bump": "code CHANGELOG.md && read -p 'Edit changelog, then press Enter to continue...' && npm version ${version} --workspaces --no-git-tag-version"
+    "after:bump": "open CHANGELOG.md && read -p 'Edit changelog, then press Enter to continue...' && npm version ${version} --workspaces --no-git-tag-version"
   }
 }

@@ -1,6 +1,6 @@
 {
   "name": "@unternet/tabletop",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A monorepo housing the Tabletop application & kernel.",
   "main": "index.js",
   "type": "module",
