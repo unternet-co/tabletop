@@ -3,7 +3,7 @@ name: Release Tabletop (Desktop)
 on:
   push:
     tags:
-      - '*.*.*'
+      - 'v*'
 permissions:
   contents: write
 jobs:
