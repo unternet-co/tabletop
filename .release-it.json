@@ -4,14 +4,13 @@
     "tagName": "v${version}",
     "pushRepo": "origin",
     "push": false,
-    "commit": false,
-    "tag": true
+    "commit": false
   },
   "npm": {
     "publish": false
   },
   "hooks": {
     "after:bump": "npm version ${version} --workspaces --no-git-tag-version",
-    "after:release": "echo 'Please edit the changelog, then commit changes.' && open CHANGELOG.md"
+    "after:release": "open CHANGELOG.md"
   }
 }
