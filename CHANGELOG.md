@@ -1,5 +1,5 @@
-# Changeling
+# Changelog
 
-## v0.1.2
+# 0.1.0
 
-Created initial build system & got it working. It's a blank app!
+Empty app shell! Hello world.
