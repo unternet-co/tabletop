@@ -1,11 +1,12 @@
 name: Release Tabletop (Desktop)
 
 on:
-  push:
-    tags:
-      - 'v*'
+  repository_dispatch:
+    types: [publish_release]
+
 permissions:
   contents: write
+
 jobs:
   package:
     name: Build and Release Tabletop (Desktop)
