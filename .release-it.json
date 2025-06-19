@@ -11,7 +11,7 @@
     "publish": false
   },
   "hooks": {
-    "after:bump": "npm version ${version} --workspaces",
+    "after:bump": "git checkout -b release/${version} && npm version ${version} --workspaces",
     "after:release": "sed -i '' \"1s/^/## ${version} - $(date +%Y-%m-%d)\\n\\n/\" CHANGELOG.md && open CHANGELOG.md"
   }
 }
