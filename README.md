@@ -4,6 +4,6 @@ A new, intelligent workspace for the web. Created by [Unternet](https://unternet
 
 ## Releasing
 
-From the latest version of main, run `npm run release`. This will select a version bump based on semantic commits, create a release branch, edit the changelog, and push. (You may want to optionally edit the changelog for clarity).
+From the latest version of main, run `npm run release`. This will create a release branch and bump the version, then pop open the changelog for you to edit.
 
-Publish this branch, and merge with main. This will trigger the build & publish to NPM.
+When ready, publish this branch, and merge with main. This will trigger the build & deployment, with auto-updates.
