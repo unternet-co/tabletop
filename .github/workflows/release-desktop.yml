@@ -31,9 +31,7 @@ jobs:
           cache: 'npm'
 
       - name: Clean install dependencies
-        working-directory: desktop
         run: |
-          rm -rf node_modules package-lock.json
           npm ci
 
       - name: Build and release (${{ matrix.platform }})
