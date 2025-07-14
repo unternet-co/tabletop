@@ -10,8 +10,11 @@
     "sourceMap": true, // generates sourcemaps
     "declarationMap": true,
     "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true
+    "forceConsistentCasingInFileNames": true,
+    "experimentalDecorators": true,
+    "useDefineForClassFields": false,
+    
   },
-  "include": ["src/**/*", "vite-env.d.ts"],
-  "exclude": ["src/main", "src/**/*.main.ts"]
+  "include": ["src/**/*", "vite-env.d.ts", "src/core/messages/.ts"],
+  "exclude": ["src/electron", "src/**/*.main.ts"]
 }

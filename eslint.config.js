@@ -5,7 +5,7 @@ import gitignore from 'eslint-config-flat-gitignore';
 export default [
   gitignore(),
   {
-    ignores: ['**/build/**'],
+    ignores: ['**/build/**', '**/dist/**'],
   },
   js.configs.recommended,
   ...tseslint.configs.recommended,

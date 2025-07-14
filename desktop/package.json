@@ -4,7 +4,7 @@
   "description": "An intelligent workspace for your computer.",
   "author": "Rupert Manfredi <rupert@unternet.co>",
   "license": "MPL-2.0",
-  "main": "dist/main/index.js",
+  "main": "dist/electron/index.js",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -14,8 +14,8 @@
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
     "format:check": "prettier --check . --ignore-path .gitignore",
-    "dev": "concurrently 'npm run dev:web' 'npm run dev:electron' ",
-    "dev:electron": "npm run build:electron && electron .  --enable-logging",
+    "dev": "concurrently 'npm run dev:web' 'npm run dev:electron'",
+    "dev:electron": "npm run build:electron && electron .",
     "dev:web": "vite",
     "build": "npm run build:electron && npm run build:web",
     "build:electron": "tsc --project tsconfig.node.json",
@@ -64,6 +64,7 @@
     "afterSign": "build/notarize.js"
   },
   "dependencies": {
-    "electron-updater": "^6.6.2"
+    "electron-updater": "^6.6.2",
+    "mitt": "^3.0.1"
   }
 }

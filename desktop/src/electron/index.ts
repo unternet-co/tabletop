@@ -7,7 +7,7 @@ const devUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173';
 const AUTOUPDATE_INTERVAL = 3_600_000; // Hourly
 
 function formatReleaseNotes(
-  notes: string | { note: string | null }[] | null | undefined
+  notes: string | { note: string | null; }[] | null | undefined
 ): string {
   if (typeof notes === 'string') return notes;
   if (Array.isArray(notes)) return notes.map((n) => n.note).join('\n\n');
@@ -53,13 +53,15 @@ function setupAutoUpdater() {
 
 const createWindow = (): void => {
   const win = new BrowserWindow({
-    height: 600,
-    width: 800,
+    height: 860,
+    width: 900,
     webPreferences: {
       nodeIntegration: false,
       contextIsolation: true,
       preload: path.join(__dirname, 'preload.js'),
     },
+    titleBarStyle: 'hidden',
+    trafficLightPosition: { x: 11, y: 11 },
   });
 
   if (isDev) {

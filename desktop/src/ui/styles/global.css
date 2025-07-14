@@ -1,0 +1,28 @@
+@import url('./colors.css');
+
+:root {
+  --spacing: 4px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+body {
+  color: var(--zinc-900);
+  background: var(--zinc-50);
+}
+
+@media screen and (prefers-color-scheme: dark) {
+  body {
+    color: var(--zinc-100);
+    background: var(--zinc-900);
+  }
+}

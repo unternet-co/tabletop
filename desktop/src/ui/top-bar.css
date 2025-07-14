@@ -1,0 +1,9 @@
+top-bar {
+  display: flex;
+  height: 38px;
+  padding: 6px 8px;
+  gap: 4px;
+  -webkit-app-region: drag;
+  align-items: center;
+  border-bottom: 1px solid var(--zinc-700);
+}
