@@ -1,0 +1,10 @@
+command-bar {
+  padding: 8px;
+  display: flex;
+}
+
+command-bar command-input {
+  width: 100%;
+  max-width: 600px;
+  margin: 0 auto;
+}
