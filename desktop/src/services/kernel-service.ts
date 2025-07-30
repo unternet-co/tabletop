@@ -18,8 +18,6 @@ export class KernelService {
       messages: this.messageService.messages,
     });
 
-    this.send = this.kernel.send.bind(this.kernel);
-
     this.kernel.on('message', (msg) => {
       this.messageService.add(msg);
     });
