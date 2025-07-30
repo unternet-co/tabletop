@@ -1,0 +1,25 @@
+tab-bar {
+  display: flex;
+  padding: 6px 8px;
+  gap: 2px;
+}
+
+tab-bar .tab {
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  border: 1px solid transparent;
+  padding: 0 6px;
+  -webkit-app-region: no-drag;
+  cursor: default;
+  transition: background-color linear 0.1s;
+}
+
+tab-bar .tab:hover {
+  background: var(--zinc-200);
+}
+
+tab-bar .tab[data-active] {
+  border-color: var(--color-border);
+  background: white;
+}

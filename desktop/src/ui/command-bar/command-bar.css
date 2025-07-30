@@ -1,10 +1,11 @@
 command-bar {
   padding: 8px;
+  padding-bottom: 16px;
   display: flex;
 }
 
 command-bar command-input {
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   margin: 0 auto;
 }
