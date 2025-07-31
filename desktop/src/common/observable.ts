@@ -6,6 +6,7 @@ export class Observable {
   subscribe(fn: Observer) {
     const id = crypto.randomUUID();
     this._observers.set(id, fn);
+    fn();
     return () => this._observers.delete(id);
   }
 

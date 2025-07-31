@@ -2,7 +2,7 @@ import { html, LitElement } from 'lit';
 import './history-view.css';
 import { customElement, state } from 'lit/decorators.js';
 import { Message } from '../../types';
-import { dependencies } from '../../utils/dependencies';
+import { dependencies } from '../../common/dependencies';
 import { MessageService } from '../../services/message-service';
 
 @customElement('history-view')

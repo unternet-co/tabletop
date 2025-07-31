@@ -10,10 +10,6 @@ app-root {
   flex-grow: 1;
 }
 
-.main workbench-view {
-  flex-grow: 1;
-}
-
 .top-bar {
   padding-left: 72px;
   -webkit-app-region: drag;
