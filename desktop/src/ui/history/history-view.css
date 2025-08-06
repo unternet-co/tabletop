@@ -1,0 +1,17 @@
+history-view {
+  display: flex;
+  width: 350px;
+  margin-right: -350px;
+  flex-direction: column-reverse;
+  padding: 16px;
+  padding-bottom: 8px;
+}
+
+history-view .message[data-active] {
+  margin-left: -350px;
+  width: 100%;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  padding: 8px 10px;
+  border-radius: 4px;
+}

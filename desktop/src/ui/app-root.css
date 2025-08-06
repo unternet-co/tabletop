@@ -1,0 +1,18 @@
+app-root {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+}
+
+.main {
+  display: flex;
+  flex-grow: 1;
+}
+
+.top-bar {
+  padding-left: 72px;
+  -webkit-app-region: drag;
+  height: 38px;
+  display: flex;
+}

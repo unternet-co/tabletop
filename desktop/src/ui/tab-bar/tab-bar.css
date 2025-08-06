@@ -1,0 +1,39 @@
+tab-bar {
+  display: flex;
+  padding: 6px 8px;
+  gap: 2px;
+}
+
+tab-bar .tab {
+  border-radius: 4px;
+  display: flex;
+  gap: 2px;
+  align-items: center;
+  border: 1px solid transparent;
+  padding: 0 6px;
+  -webkit-app-region: no-drag;
+  cursor: default;
+}
+
+tab-bar .tab .close-icon {
+  color: var(--color-body-muted);
+  border-radius: 2px;
+  opacity: 0;
+}
+
+tab-bar .tab .close-icon:hover {
+  background: var(--color-surface-inset);
+}
+tab-bar .tab:hover:not([data-active]) .close-icon:hover {
+  background: var(--color-surface-pressed);
+}
+
+tab-bar .tab:hover .close-icon,
+tab-bar .tab[data-active] .close-icon {
+  opacity: 1;
+}
+
+tab-bar .tab[data-active] {
+  border-color: var(--color-border);
+  background: var(--color-surface);
+}
