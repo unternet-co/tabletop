@@ -31,5 +31,11 @@ export class ProcessService extends Observable {
     }
   }
 
+  kill(pid: string) {
+    this.kernel.kill(pid);
+    this.db.delete(pid);
+    this.notify();
+  }
+
   get processes() { return this.kernel.processes; }
 }

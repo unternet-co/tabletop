@@ -2,16 +2,18 @@ import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { Tab } from './tab';
 import './tab-bar.css';
-import { icon } from '../common/icon';
+import '../common/icon';
 import { dependencies } from '../../common/dependencies';
 import { WorkspaceService } from '../../services/workspace-service';
 import { WorkspaceModel } from '../../models/workspace-model';
+import { ProcessService } from '../../services/process-service';
 
 @customElement('tab-bar')
 export class TabBar extends LitElement {
   renderRoot = this;
   workspaceService = dependencies.resolve<WorkspaceService>('WorkspaceService');
-  workspaceModel: WorkspaceModel;
+  workspaceModel = this.workspaceService.activeWorkspaceModel;
+  processService = dependencies.resolve<ProcessService>('ProcessService');
 
   @state()
   tabs: Array<Tab> = [];
@@ -21,8 +23,6 @@ export class TabBar extends LitElement {
 
   constructor() {
     super();
-
-    this.workspaceModel = this.workspaceService.activeWorkspaceModel;
 
     this.workspaceModel.subscribe(() => {
       console.log('tab id', this.workspaceModel.focusedProcessId);
@@ -41,26 +41,29 @@ export class TabBar extends LitElement {
     this.workspaceModel.focusedProcessId = id;
   }
 
+  closeTab(id: string) {
+    this.processService.kill(id);
+  }
+
   render() {
-    console.log('re-renderinng', this.activeTabId, this.tabs);
     const tabs = this.tabs.map((tab) => {
       return html`
         <div
-          class="tab"
+          class="tab pressable"
           ?data-active=${this.activeTabId === tab.id}
           @mousedown=${() => this.setActiveTab(tab.id)}>
-          ${tab.icon ? icon(tab.icon) : null}
           <span class="tab-title">${tab.title ?? 'Untitled'}</span>
+          <un-icon icon=${'close'} class="close-icon pressable" @mousedown=${() => this.closeTab(tab.id)}></un-icon>
         </div>
       `;
     });
 
     const button = html`
       <button
-        class="toolbar-button"
+        class="toolbar-button pressable"
         @mousedown=${() => this.setActiveTab(null)}
       >
-        ${icon('home')}
+        <un-icon .icon=${'home'}></un-icon>
       </button>
     `;
 

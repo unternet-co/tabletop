@@ -4,7 +4,7 @@
   "description": "An intelligent workspace for your computer.",
   "author": "Rupert Manfredi <rupert@unternet.co>",
   "license": "MPL-2.0",
-  "main": "dist/electron/index.js",
+  "main": "dist/electron/index.main.js",
   "engines": {
     "node": ">=20.0.0"
   },
@@ -18,7 +18,7 @@
     "dev:electron": "npm run build:electron && electron .",
     "dev:web": "vite",
     "build": "npm run build:electron && npm run build:web",
-    "build:electron": "tsc --project tsconfig.node.json",
+    "build:electron": "tsc --project tsconfig.main.json",
     "build:icons": "node build/build-icons.js",
     "build:web": "vite build",
     "package": "electron-builder --mac --universal"

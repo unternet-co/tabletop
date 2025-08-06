@@ -40,6 +40,25 @@ async function init() {
 
   const root = document.createElement('app-root');
   document.body.appendChild(root);
+
+  // Test IPC bridge if we're in Electron
+  if (window.ipc) {
+    const { testService } = await import('./electron/services/test-service');
+
+    console.log('Testing IPC bridge...');
+    try {
+      const response = await testService.sendTestMessage('Hello from renderer!');
+      console.log('✅ IPC test successful:', response);
+
+      const sum = await testService.calculateSum(5, 10);
+      console.log('✅ IPC calculation test:', sum);
+    } catch (error) {
+      console.error('❌ IPC test failed:', error);
+    }
+  } else {
+    console.log('NO IPC');
+  }
 }
 
 init();
+

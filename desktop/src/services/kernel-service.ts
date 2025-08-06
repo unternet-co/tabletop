@@ -1,5 +1,6 @@
 import { createMessage, Kernel, type LanguageModel } from '@unternet/kernel';
 import applyWebPageExtension, { WebPageProcess } from '../extensions/webpage';
+import { isURL } from '../utils/is-url';
 
 export class KernelService {
   public kernel: Kernel;
@@ -22,7 +23,7 @@ export class KernelService {
   }
 
   handleInput(text: string) {
-    if (text.startsWith('https:')) {
+    if (isURL(text)) {
       const process = new WebPageProcess({ url: text });
       this.kernel.spawn(process);
       return;

@@ -12,9 +12,8 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "experimentalDecorators": true,
-    "useDefineForClassFields": false,
-    
+    "useDefineForClassFields": false
   },
   "include": ["src/**/*", "vite-env.d.ts", "src/core/messages/.ts"],
-  "exclude": ["src/electron", "src/**/*.main.ts"]
+  "exclude": ["src/**/*.main.ts", "src/**/main/**/*"]
 }
