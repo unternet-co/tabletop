@@ -1,4 +1,4 @@
-export function registerIPCService<T>(): {
+export function registerIPCService<T>(serviceName: string): {
   [K in keyof T]: T[K] extends (...args: infer P) => infer R
   ? (...args: P) => Promise<Awaited<R>>
   : never
@@ -7,7 +7,7 @@ export function registerIPCService<T>(): {
     get(target, prop: string | symbol) {
       if (typeof prop === 'string') {
         return (...args: any[]) => {
-          return window.ipc.invoke(prop, args);
+          return window.ipc.invoke(serviceName, prop, args);
         };
       }
       return undefined;

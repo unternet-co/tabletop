@@ -7,6 +7,8 @@ import { IndexedDB } from './stores/indexed-db';
 import { MessageService } from './services/message-service';
 import { ProcessService } from './services/process-service';
 import { WorkspaceService } from './services/workspace-service';
+import { registerIPCService } from './electron/ipc-service.renderer';
+import { IHTTPService } from './services/http-service';
 
 async function init() {
   const db = new IndexedDB();
@@ -38,26 +40,11 @@ async function init() {
   dependencies.registerSingleton('WorkspaceService', workspaceService);
   await workspaceService.load();
 
+  const httpService = registerIPCService<IHTTPService>('HTTPService');
+  dependencies.registerSingleton('HTTPService', httpService);
+
   const root = document.createElement('app-root');
   document.body.appendChild(root);
-
-  // Test IPC bridge if we're in Electron
-  if (window.ipc) {
-    const { testService } = await import('./electron/services/test-service');
-
-    console.log('Testing IPC bridge...');
-    try {
-      const response = await testService.sendTestMessage('Hello from renderer!');
-      console.log('✅ IPC test successful:', response);
-
-      const sum = await testService.calculateSum(5, 10);
-      console.log('✅ IPC calculation test:', sum);
-    } catch (error) {
-      console.error('❌ IPC test failed:', error);
-    }
-  } else {
-    console.log('NO IPC');
-  }
 }
 
 init();

@@ -2,9 +2,9 @@ import { ipcMain } from 'electron';
 
 export function registerIPCService<T extends object>(
   service: T,
-  serviceName?: string
 ): void {
-  const handlerName = serviceName || 'invoke';
+  const handlerName = service.constructor.name;
+  console.log(handlerName);
 
   ipcMain.handle(handlerName, async (event, methodName: string, args: any[]) => {
     const method = (service as any)[methodName];

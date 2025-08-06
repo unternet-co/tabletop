@@ -19,9 +19,8 @@ export class WorkspaceService extends Observable {
     for (const ws of savedWorkspaces) {
       this._workspaces.set(ws.id, ws);
     }
-    this.setActiveWorkspace(savedWorkspaces[0].id);
-
     if (!savedWorkspaces.length) await this.create();
+    this.setActiveWorkspace(savedWorkspaces[0].id);
   }
 
   async create() {

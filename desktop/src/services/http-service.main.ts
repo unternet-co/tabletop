@@ -1,28 +1,31 @@
 import { IHTTPService, WebsiteMetadata } from './http-service';
+import { JSDOM } from 'jsdom';
 
-class HTTPService implements IHTTPService {
+export class HTTPService implements IHTTPService {
   async getMetadata(url: string) {
     let metadata = {} as WebsiteMetadata;
 
     url = new URL(url).href;
 
-    const html = await fetch(url);
-    const parser = new DOMParser();
-    const dom = parser.parseFromString(html, 'text/html');
-    const manifestLink = dom.querySelector(
-      'link[rel="manifest"]'
-    ) as HTMLLinkElement;
+    const response = await fetch(url);
+    const html = await response.text();
 
-    metadata.title = dom.querySelector('title')?.innerText;
+    const doc = new JSDOM(html).window.document;
 
-    if (manifestLink) {
+    const manifestLink = doc.querySelector('link[rel="manifest"]');
+    const manifestHref = manifestLink?.getAttribute('href');
+
+    if (manifestHref) {
       const baseUrl = new URL(url).origin;
-      const manifestUrl = new URL(manifestLink.getAttribute('href'), baseUrl)
-        .href;
-      const manifestText = await fetch(manifestUrl);
+      const manifestUrl = new URL(manifestHref, baseUrl).href;
+
+      const manifestReq = await fetch(manifestUrl);
+      const manifestText = await manifestReq.text();
+
       if (manifestText) {
         const manifest = JSON.parse(manifestText);
         metadata = manifest;
+
         if (manifest.icons) {
           metadata.icons = manifest.icons.map((icon) => {
             icon.src = new URL(`../${icon.src}`, manifestUrl).href;
@@ -32,43 +35,40 @@ class HTTPService implements IHTTPService {
       }
     }
 
+    metadata.title = doc.title;
+
     if (!metadata.name) {
-      const metaAppName = dom.querySelector(
-        'meta[name="application-name"]'
-      ) as HTMLMetaElement;
+      const metaAppName = doc.querySelector('meta[name="application-name"]');
       if (metaAppName) {
-        metadata.name = metaAppName.content;
+        metadata.name = metaAppName.textContent ?? undefined;
       } else {
-        const title = dom.querySelector('title')?.innerText;
-        metadata.name = title.split(' - ')[0].split(' | ')[0];
+        const title = doc.querySelector('title')?.innerText;
+        metadata.name = title?.split(' - ')[0].split(' | ')[0];
       }
     }
 
     if (!metadata.icons) {
-      const faviconLink = dom.querySelector(
-        'link[rel~="icon"]'
-      ) as HTMLLinkElement;
-      if (faviconLink)
-        metadata.icons = [
-          { src: new URL(faviconLink.getAttribute('href'), url).href },
-        ];
+      const faviconLink = doc.querySelector('link[rel~="icon"]');
+      const faviconHref = faviconLink?.getAttribute('href');
+      if (faviconHref) metadata.icons = [{
+        src: new URL(faviconHref, url).href
+      }];
     }
 
     if (!metadata.description) {
-      metadata.description = dom
+      metadata.description = doc
         .querySelector('meta[name="description"]')
-        ?.getAttribute('content');
+        ?.getAttribute('content') || undefined;
     }
 
     if (!metadata.title) {
       metadata.title = metadata.name;
     }
 
-    const r = new Readability(dom);
-    const content = r.parse();
-    metadata.textContent = content?.textContent;
+    // const r = new Readability(doc);
+    // const content = r.parse();
+    // metadata.textContent = content?.textContent?.trim() || undefined;
 
     return metadata;
-    // dom.querySelector('meta[name="description"]').getAttribute('content');
   }
 }
