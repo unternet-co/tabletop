@@ -1,19 +1,21 @@
 import { Table } from 'dexie';
 import { Message } from '../types';
-import { Observable } from '../utils/observable';
-import { createMessage, MessageDelta, ReplyMessage } from '@unternet/kernel';
-
-interface MessageServiceInit {
-  db: Table<Message>;
-}
+import { Observable } from '../common/observable';
+import { Kernel, MessageDelta, ReplyMessage } from '@unternet/kernel';
+import { KernelService } from './kernel-service';
 
 export class MessageService extends Observable {
-  db: Table<Message>;
   private _messages = new Map<Message['id'], Message>();
+  private kernel: Kernel;
 
-  constructor({ db }: MessageServiceInit) {
+  constructor(
+    private db: Table<Message>,
+    kernelService: KernelService,
+  ) {
     super();
     this.db = db;
+    this.kernel = kernelService.kernel;
+    this.kernel.on('message', this.handleMessage.bind(this));
   }
 
   get messages() {
@@ -23,10 +25,11 @@ export class MessageService extends Observable {
   async load() {
     const msgs = await this.db.toArray();
     for (const msg of msgs) this._messages.set(msg.id, msg);
+    this.kernel.messages = this.messages;
     this.notify();
   }
 
-  add(msg: Message | MessageDelta) {
+  handleMessage(msg: Message | MessageDelta) {
     if (msg.type === 'delta') {
       if (msg.messageType !== 'reply') return;
 

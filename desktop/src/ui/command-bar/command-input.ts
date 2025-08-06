@@ -1,7 +1,7 @@
 import { html, LitElement } from 'lit';
 import './command-input.css';
 import { customElement, property } from 'lit/decorators.js';
-import { dependencies } from '../../utils/dependencies';
+import { dependencies } from '../../common/dependencies';
 import { KernelService } from '../../services/kernel-service';
 import { createMessage, InputMessage } from '@unternet/kernel';
 
@@ -19,12 +19,7 @@ export class CommandInput extends LitElement {
     const target = e.target as HTMLInputElement;
 
     if (e.key === 'Enter') {
-      const msg = createMessage<InputMessage>({
-        type: 'input',
-        text: target.value,
-      });
-
-      this.kernelService.send(msg);
+      this.kernelService.handleInput(target.value);
       target.value = '';
     }
   };

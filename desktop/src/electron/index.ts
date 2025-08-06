@@ -1,6 +1,8 @@
 import { app, BrowserWindow, dialog, MessageBoxOptions } from 'electron';
 import path from 'path';
 import { autoUpdater } from 'electron-updater';
+import { registerIPCService } from './ipc-service.main';
+import { HTTPService } from '../services/http-service.main';
 
 const isDev = !app.isPackaged;
 const devUrl = process.env.VITE_DEV_SERVER_URL || 'http://localhost:5173';
@@ -51,7 +53,7 @@ function setupAutoUpdater() {
   autoUpdater.checkForUpdates();
 }
 
-const createWindow = (): void => {
+function createWindow() {
   const win = new BrowserWindow({
     height: 860,
     width: 900,
@@ -73,9 +75,15 @@ const createWindow = (): void => {
   }
 };
 
+function registerServices() {
+  const httpService = new HTTPService();
+  registerIPCService(httpService);
+}
+
 app.on('ready', () => {
-  createWindow();
   setupAutoUpdater();
+  createWindow();
+  registerServices();
 });
 
 // Quit when all windows are closed, except on macOS.

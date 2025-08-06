@@ -2,46 +2,68 @@ import { LitElement, html } from 'lit';
 import { customElement, state } from 'lit/decorators.js';
 import { Tab } from './tab';
 import './tab-bar.css';
-import { icon } from '../common/icon';
+import '../common/icon';
+import { dependencies } from '../../common/dependencies';
+import { WorkspaceService } from '../../services/workspace-service';
+import { WorkspaceModel } from '../../models/workspace-model';
+import { ProcessService } from '../../services/process-service';
 
 @customElement('tab-bar')
 export class TabBar extends LitElement {
   renderRoot = this;
+  workspaceService = dependencies.resolve<WorkspaceService>('WorkspaceService');
+  workspaceModel = this.workspaceService.activeWorkspaceModel;
+  processService = dependencies.resolve<ProcessService>('ProcessService');
 
   @state()
-  tabs: Array<Tab> = [
-    {
-      id: "1234",
-      title: "My Cool Tab",
-    },
-    {
-      id: "1235",
-      title: "My Cool Tab",
-    }
-  ];
+  tabs: Array<Tab> = [];
 
   @state()
   activeTabId: Tab['id'] | null = null;
+
+  constructor() {
+    super();
+
+    this.workspaceModel.subscribe(() => {
+      console.log('tab id', this.workspaceModel.focusedProcessId);
+      this.tabs = this.workspaceModel.processes.map((process) => {
+        return {
+          id: process.id,
+          title: process.name,
+        };
+      });
+
+      this.activeTabId = this.workspaceModel.focusedProcessId;
+    });
+  }
+
+  setActiveTab(id: string | null) {
+    this.workspaceModel.focusedProcessId = id;
+  }
+
+  closeTab(id: string) {
+    this.processService.kill(id);
+  }
 
   render() {
     const tabs = this.tabs.map((tab) => {
       return html`
         <div
-          class="tab"
+          class="tab pressable"
           ?data-active=${this.activeTabId === tab.id}
-          @mousedown=${() => this.activeTabId = tab.id}>
-          ${tab.icon ? icon(tab.icon) : null}
-          <span class="tab-title">${tab.title}</span>
+          @mousedown=${() => this.setActiveTab(tab.id)}>
+          <span class="tab-title">${tab.title ?? 'Untitled'}</span>
+          <un-icon icon=${'close'} class="close-icon pressable" @mousedown=${() => this.closeTab(tab.id)}></un-icon>
         </div>
       `;
     });
 
     const button = html`
       <button
-        class="toolbar-button"
-        @mousedown=${() => this.activeTabId = null}
+        class="toolbar-button pressable"
+        @mousedown=${() => this.setActiveTab(null)}
       >
-        ${icon('home')}
+        <un-icon .icon=${'home'}></un-icon>
       </button>
     `;
 

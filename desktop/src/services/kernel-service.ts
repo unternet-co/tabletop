@@ -1,31 +1,35 @@
-import { Kernel, Message, type LanguageModel } from '@unternet/kernel';
-import { type MessageService } from './message-service';
-
-interface KernelServiceInit {
-  model: LanguageModel;
-  messageService: MessageService;
-}
+import { createMessage, Kernel, type LanguageModel } from '@unternet/kernel';
+import applyWebPageExtension, { WebPageProcess } from '../extensions/webpage';
+import { isURL } from '../utils/is-url';
 
 export class KernelService {
-  kernel: Kernel;
-  messageService: MessageService;
+  public kernel: Kernel;
 
-  constructor({ model, messageService }: KernelServiceInit) {
-    this.messageService = messageService;
+  constructor(
+    model: LanguageModel,
+  ) {
 
-    this.kernel = new Kernel({
-      model,
-      messages: this.messageService.messages,
-    });
+    // const openWebsiteTool = createTool({
+    //   name: 'open_website',
+    //   description: 'Open a website and display it to the user.',
+    //   parameters: z.object({ url: z.string() }),
+    //   execute: ({ url }) => {
+    //     this.processService.
+    //   }
+    // });
 
-    this.send = this.kernel.send.bind(this.kernel);
-
-    this.kernel.on('message', (msg) => {
-      this.messageService.add(msg);
-    });
+    this.kernel = new Kernel({ model });
+    applyWebPageExtension(this.kernel);
   }
 
-  send(msg: Message) {
+  handleInput(text: string) {
+    if (isURL(text)) {
+      const process = new WebPageProcess({ url: text });
+      this.kernel.spawn(process);
+      return;
+    }
+
+    const msg = createMessage('input', { text });
     this.kernel.send(msg);
   }
 }
