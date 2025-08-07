@@ -1,6 +1,7 @@
 import { createMessage, Kernel, type LanguageModel } from '@unternet/kernel';
 import applyWebPageExtension, { WebPageProcess } from '../extensions/webpage';
-import { isURL } from '../utils/is-url';
+import { url } from '../utils/is-url';
+import { Underline } from 'lucide';
 
 export class KernelService {
   public kernel: Kernel;
@@ -23,8 +24,10 @@ export class KernelService {
   }
 
   handleInput(text: string) {
-    if (isURL(text)) {
-      const process = new WebPageProcess({ url: text });
+    const parsedUrl = url(text);
+    if (parsedUrl) {
+      const process = new WebPageProcess();
+      process.loadURL(parsedUrl);
       this.kernel.spawn(process);
       return;
     }

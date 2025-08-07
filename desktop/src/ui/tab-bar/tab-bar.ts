@@ -25,11 +25,11 @@ export class TabBar extends LitElement {
     super();
 
     this.workspaceModel.subscribe(() => {
-      console.log('tab id', this.workspaceModel.focusedProcessId);
       this.tabs = this.workspaceModel.processes.map((process) => {
         return {
           id: process.id,
           title: process.name,
+          icon: process.icons?.[0],
         };
       });
 
@@ -47,11 +47,17 @@ export class TabBar extends LitElement {
 
   render() {
     const tabs = this.tabs.map((tab) => {
+      const iconElement = tab.icon
+        ? html`<img src="${tab.icon.src}" class="tab-icon" alt="" />`
+        : '';
+
       return html`
         <div
           class="tab pressable"
           ?data-active=${this.activeTabId === tab.id}
           @mousedown=${() => this.setActiveTab(tab.id)}>
+          
+          ${iconElement}
           <span class="tab-title">${tab.title ?? 'Untitled'}</span>
           <un-icon icon=${'close'} class="close-icon pressable" @mousedown=${() => this.closeTab(tab.id)}></un-icon>
         </div>

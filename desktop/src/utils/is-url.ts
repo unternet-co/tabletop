@@ -1,13 +1,16 @@
-export function isURL(input: string): boolean {
+export function url(input: string): string | false {
   const trimmedInput = input.trim();
+  let url: URL;
 
   try {
-    new URL(trimmedInput);
+    url = new URL(trimmedInput);
   } catch {
     try {
-      new URL(`https://${trimmedInput}`);
+      url = new URL(`https://${trimmedInput}`);
     } catch {
       return false;
     }
   }
+
+  return url.href;
 }
