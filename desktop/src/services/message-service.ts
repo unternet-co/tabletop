@@ -34,7 +34,6 @@ export class MessageService extends Observable {
       if (msg.messageType !== 'reply') return;
 
       let savedMsg = this._messages.get(msg.id) as ReplyMessage;
-
       if (!savedMsg) {
         savedMsg = {
           id: msg.id,
@@ -46,10 +45,11 @@ export class MessageService extends Observable {
       }
 
       savedMsg.text += msg.delta.text ?? '';
+      this._messages.set(msg.id, savedMsg);
       this.db.put(savedMsg);
     } else {
-      this.db.add(msg);
-      this.messages.push(msg);
+      this._messages.set(msg.id, msg);
+      this.db.put(msg);
     }
 
     this.notify();

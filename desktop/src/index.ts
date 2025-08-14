@@ -8,7 +8,7 @@ import { MessageService } from './services/message-service';
 import { ProcessService } from './services/process-service';
 import { WorkspaceService } from './services/workspace-service';
 import { registerIPCService } from './electron/ipc-service.renderer';
-import { IHTTPService } from './services/http-service';
+import { IHTTPService } from './services/http-service.shared';
 
 async function init() {
   const db = new IndexedDB();

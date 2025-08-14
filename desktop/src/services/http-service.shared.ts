@@ -1,4 +1,4 @@
-import { ResourceIcon } from '@unternet/kernel/dist/resources';
+import { ResourceIcon } from '@unternet/kernel';
 
 export interface WebsiteMetadata {
   title?: string;

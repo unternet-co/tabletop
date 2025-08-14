@@ -1,5 +1,6 @@
-import { IHTTPService, WebsiteMetadata } from './http-service';
+import { IHTTPService, WebsiteMetadata } from './http-service.shared';
 import { JSDOM } from 'jsdom';
+import { Readability } from '@mozilla/readability';
 
 export class HTTPService implements IHTTPService {
   async getMetadata(url: string) {
@@ -42,8 +43,7 @@ export class HTTPService implements IHTTPService {
       if (metaAppName) {
         metadata.name = metaAppName.textContent ?? undefined;
       } else {
-        const title = doc.querySelector('title')?.innerText;
-        metadata.name = title?.split(' - ')[0].split(' | ')[0];
+        metadata.name = metadata.title?.split(' - ')[0].split(' | ')[0].split(':')[0];
       }
     }
 
@@ -61,13 +61,9 @@ export class HTTPService implements IHTTPService {
         ?.getAttribute('content') || undefined;
     }
 
-    if (!metadata.title) {
-      metadata.title = metadata.name;
-    }
-
-    // const r = new Readability(doc);
-    // const content = r.parse();
-    // metadata.textContent = content?.textContent?.trim() || undefined;
+    const r = new Readability(doc);
+    const content = r.parse();
+    metadata.textContent = content?.textContent?.trim() || undefined;
 
     return metadata;
   }
