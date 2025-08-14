@@ -21,6 +21,12 @@ tab-bar .tab .close-icon {
   opacity: 0;
 }
 
+tab-bar .tab .tab-icon {
+  width: 14px;
+  height: 14px;
+  border-radius: 2px;
+}
+
 tab-bar .tab .close-icon:hover {
   background: var(--color-surface-inset);
 }

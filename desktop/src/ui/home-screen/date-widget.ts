@@ -18,8 +18,9 @@ export class DateWidget extends LitElement {
   render() {
     const now = new Date();
 
-    const hour = now.toLocaleTimeString([], { hour: 'numeric' });
+    const hour = now.getHours() % 12 || 12;
     const minute = now.getMinutes().toString().padStart(2, '0');
+    const ampm = now.getHours() >= 12 ? 'PM' : 'AM';
 
     const formattedDate = now.toLocaleDateString([], {
       weekday: 'long',
@@ -28,11 +29,11 @@ export class DateWidget extends LitElement {
     });
 
     return html`
-      <div class="time-container">
-        <div class="time">${hour}<span class="colon">:</span>${minute}</div>
-        <div class="date">${formattedDate}</div>
-      </div>
-    `;
+    <div class="time-container">
+      <div class="time">${hour}<span class="colon">:</span>${minute} ${ampm}</div>
+      <div class="date">${formattedDate}</div>
+    </div>
+  `;
   }
 
   static styles = css`
@@ -40,15 +41,18 @@ export class DateWidget extends LitElement {
       display: flex;
       flex-direction: column;
       text-align: center;
+      gap: 16px;
     }
 
     .time {
-      font-size: 60px;
+      font-size: 50px;
       color: var(--color-text-muted);
+      font-weight: 700;
     }
 
     .date {
-      font-size: 18px;
+      font-size: 24px;
+      color: var(--color-body-muted);
     }
 
     .colon {

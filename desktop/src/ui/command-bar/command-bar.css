@@ -1,11 +1,12 @@
 command-bar {
-  padding: 8px;
-  padding-bottom: 16px;
+  padding: 12px;
   display: flex;
+  -webkit-app-region: drag;
 }
 
 command-bar command-input {
   width: 100%;
   max-width: 500px;
   margin: 0 auto;
+  -webkit-app-region: no-drag;
 }

@@ -1,6 +1,6 @@
 import { Table } from 'dexie';
 import { KernelService } from './kernel-service';
-import { Kernel, Process, ProcessSnapshot } from '@unternet/kernel';
+import { Kernel, ProcessSnapshot } from '@unternet/kernel';
 import { Observable } from '../common/observable';
 
 export class ProcessService extends Observable {
@@ -13,12 +13,12 @@ export class ProcessService extends Observable {
     super();
     this.kernel = kernelService.kernel;
 
-    this.kernel.on('process.created', ({ process }) => {
+    this.kernel.on('process-created', ({ process }) => {
       this.db.put(process.snapshot);
       this.notify();
     });
 
-    this.kernel.on('process.changed', ({ process }) => {
+    this.kernel.on('process-changed', ({ process }) => {
       this.db.put(process.snapshot);
       this.notify();
     });

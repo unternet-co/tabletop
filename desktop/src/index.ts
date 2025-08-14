@@ -8,7 +8,7 @@ import { MessageService } from './services/message-service';
 import { ProcessService } from './services/process-service';
 import { WorkspaceService } from './services/workspace-service';
 import { registerIPCService } from './electron/ipc-service.renderer';
-import { IHTTPService } from './services/http-service';
+import { IHTTPService } from './services/http-service.shared';
 
 async function init() {
   const db = new IndexedDB();
@@ -16,6 +16,9 @@ async function init() {
   const openai = createOpenAI({
     apiKey: import.meta.env.VITE_OPENAI_API_KEY,
   });
+
+  const httpService = registerIPCService<IHTTPService>('HTTPService');
+  dependencies.registerSingleton('HTTPService', httpService);
 
   const kernelService = new KernelService(
     openai('gpt-4o'),
@@ -39,9 +42,6 @@ async function init() {
   const workspaceService = new WorkspaceService(db.workspaces);
   dependencies.registerSingleton('WorkspaceService', workspaceService);
   await workspaceService.load();
-
-  const httpService = registerIPCService<IHTTPService>('HTTPService');
-  dependencies.registerSingleton('HTTPService', httpService);
 
   const root = document.createElement('app-root');
   document.body.appendChild(root);

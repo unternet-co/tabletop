@@ -1,6 +1,7 @@
-import { createMessage, Kernel, type LanguageModel } from '@unternet/kernel';
+import { createMessage, createTool, Kernel, type LanguageModel } from '@unternet/kernel';
 import applyWebPageExtension, { WebPageProcess } from '../extensions/webpage';
-import { isURL } from '../utils/is-url';
+import { validateURL } from '../utils/validate-url';
+import { z } from 'zod';
 
 export class KernelService {
   public kernel: Kernel;
@@ -9,22 +10,21 @@ export class KernelService {
     model: LanguageModel,
   ) {
 
-    // const openWebsiteTool = createTool({
-    //   name: 'open_website',
-    //   description: 'Open a website and display it to the user.',
-    //   parameters: z.object({ url: z.string() }),
-    //   execute: ({ url }) => {
-    //     this.processService.
-    //   }
-    // });
+    const tools = [createTool({
+      name: 'open_website',
+      description: 'Open a website and display it to the user.',
+      parameters: z.object({ url: z.string() }),
+      execute: ({ url }) => WebPageProcess.fromURL(url),
+    })];
 
-    this.kernel = new Kernel({ model });
+    this.kernel = new Kernel({ model, tools });
     applyWebPageExtension(this.kernel);
   }
 
-  handleInput(text: string) {
-    if (isURL(text)) {
-      const process = new WebPageProcess({ url: text });
+  async handleInput(text: string) {
+    const parsedUrl = validateURL(text);
+    if (parsedUrl) {
+      const process = WebPageProcess.fromURL(parsedUrl);
       this.kernel.spawn(process);
       return;
     }

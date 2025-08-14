@@ -32,7 +32,6 @@ export class WorkspaceModel extends Observable implements Workspace {
     this.workspaceService.subscribe(() => {
       const ws = this.workspaceService.get(this.id);
       this._focusedProcessId = ws.focusedProcessId;
-      console.log(this._focusedProcessId);
       this.notify();
     });
 
