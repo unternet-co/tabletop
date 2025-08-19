@@ -13,14 +13,20 @@ export class ProcessService extends Observable {
     super();
     this.kernel = kernelService.kernel;
 
+    this.kernel.on('processes-updated', () => {
+      this.notify();
+    });
+
     this.kernel.on('process-created', ({ process }) => {
       this.db.put(process.snapshot);
-      this.notify();
     });
 
     this.kernel.on('process-changed', ({ process }) => {
       this.db.put(process.snapshot);
-      this.notify();
+    });
+
+    this.kernel.on('process-exited', ({ pid }) => {
+      this.db.delete(pid);
     });
   }
 

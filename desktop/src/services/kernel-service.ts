@@ -17,7 +17,9 @@ export class KernelService {
       execute: ({ url }) => WebPageProcess.fromURL(url),
     })];
 
-    this.kernel = new Kernel({ model, tools });
+    const instructions = `If the user wants a simple factual lookup, or enters some keywords like a search query, show them a google search page querying this, and then also respond directly to answer.`;
+
+    this.kernel = new Kernel({ model, tools, instructions });
     applyWebPageExtension(this.kernel);
   }
 

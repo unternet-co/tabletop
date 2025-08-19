@@ -5,11 +5,13 @@ import { ProcessService } from '../services/process-service';
 import { WorkspaceService } from '../services/workspace-service';
 import { Message, Workspace } from '../types';
 import { Observable } from '../common/observable';
+import { KernelService } from '../services/kernel-service';
 
 export class WorkspaceModel extends Observable implements Workspace {
   workspaceService = dependencies.resolve<WorkspaceService>('WorkspaceService');
   messageService = dependencies.resolve<MessageService>('MessageService');
   processService = dependencies.resolve<ProcessService>('ProcessService');
+  kernelService = dependencies.resolve<KernelService>('KernelService');
 
   id: string;
   messages: Message[] = [];
@@ -38,6 +40,14 @@ export class WorkspaceModel extends Observable implements Workspace {
     this.messageService.subscribe(() => {
       this.messages = this.messageService.messages;
       this.notify();
+    });
+
+    this.kernelService.kernel.on('process-created', ({ process }) => {
+      this._focusedProcessId = process.id;
+    });
+
+    this.kernelService.kernel.on('process-exited', ({ pid }) => {
+      this._focusedProcessId = null;
     });
 
     this.processService.subscribe(() => {
